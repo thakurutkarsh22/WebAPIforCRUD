@@ -129,5 +129,41 @@ namespace WebAPIforCRUD.Controllers
             return Ok(student);
         }
 
+        // post action Result 
+
+        public IHttpActionResult PostNewStudent(studentViewModel student)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid data.");
+
+            }
+          
+                studentCollection.InsertOne(new studentViewModel()
+                {
+                    Id = student.Id,
+                    FirstName = student.FirstName,
+                    SecondName = student.SecondName,
+                    Email = student.Email,
+                    Password = student.Password
+                });
+            return Ok("DOne");
+        }
+
+        // delete action result 
+
+        public IHttpActionResult DeleteStudentby(string id)
+        {
+            var on = ObjectId.Parse(id); 
+            var delete_obj = Builders<studentViewModel>.Filter.Eq("_id",on );
+
+            studentCollection.DeleteOne(delete_obj);
+
+            return Ok("Voila Deleted");
+        }
+
+
     }
+
 }
+
