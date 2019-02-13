@@ -20,7 +20,7 @@ namespace WebAPIforCRUD.Controllers
         public StudentController()
         {
             dbcontext = new MongoDBContext();
-            studentCollection = dbcontext.database.GetCollection<studentViewModel>("student");
+            studentCollection = dbcontext.database.GetCollection<studentViewModel>("STUDENT");
 
             
         }
@@ -32,9 +32,9 @@ namespace WebAPIforCRUD.Controllers
 
             IList<studentViewModel> students = studentCollection.AsQueryable<studentViewModel>().Select(s => new studentViewModel()
             {
-                Id = s.Id,
-                FirstName = s.FirstName,
-                SecondName = s.SecondName
+                _id = s._id,
+                stuName = s.stuName,
+                email = s.email
                 
             }).ToList();
             
@@ -62,11 +62,12 @@ namespace WebAPIforCRUD.Controllers
             student = studentCollection.AsQueryable<studentViewModel>()
                     .Select(s => new studentViewModel()
                     {
-                        Id = s.Id,
-                        FirstName = s.FirstName,
-                        SecondName = s.SecondName
-                    }).Where(s => s.Id == query_id)
-                 .SingleOrDefault(x => x.Id == query_id);
+                        _id = s._id,
+                        stuName = s.stuName,
+                        email = s.email
+
+                    }).Where(s => s._id == query_id)
+                 .SingleOrDefault(x => x._id == query_id);
 
 
             if (student == null)
@@ -87,10 +88,11 @@ namespace WebAPIforCRUD.Controllers
             student = studentCollection.AsQueryable<studentViewModel>()
                     .Select(s => new studentViewModel()
                     {
-                        Id = s.Id,
-                        FirstName = s.FirstName,
-                        SecondName = s.SecondName
-                    }).Where(s=>s.FirstName == namesss)
+                        _id = s._id,
+                        stuName = s.stuName,
+                        email = s.email
+
+                    }).Where(s=>s.stuName == namesss)
                     .ToList<studentViewModel>();
                //  .SingleOrDefault(x => x.FirstName == namesss);
 
@@ -112,13 +114,14 @@ namespace WebAPIforCRUD.Controllers
 
             student = studentCollection.AsQueryable<studentViewModel>()
                     .Select(s => new studentViewModel()
-                    {   Id=s.Id,
-                        FirstName = s.FirstName,
-                        SecondName = s.SecondName,
-                        Email = s.Email
-                    }).Where(s => s.Email == email)
+                    {
+                        _id = s._id,
+                        stuName = s.stuName,
+                        email = s.email
+
+                    }).Where(s => s.email == email)
                     
-             .SingleOrDefault(x => x.Email == email);
+             .SingleOrDefault(x => x.email == email);
 
 
             if (student == null)
@@ -141,11 +144,16 @@ namespace WebAPIforCRUD.Controllers
           
                 studentCollection.InsertOne(new studentViewModel()
                 {
-                    Id = student.Id,
-                    FirstName = student.FirstName,
-                    SecondName = student.SecondName,
-                    Email = student.Email,
-                    Password = student.Password
+                    _id = student._id,
+                    stuName = student.stuName,
+                    email = student.email,
+                    pwd = student.pwd,
+                    mobNo = student.mobNo,
+                    Address = student.Address,
+                    changeTime = student.changeTime,
+                    updateTime = student.updateTime,
+                    deleteTime = student.updateTime,
+                    CreateTime = student.updateTime
                 });
             return Ok("DOne");
         }
@@ -162,7 +170,7 @@ namespace WebAPIforCRUD.Controllers
             return Ok("Voila Deleted");
         }
 
-
+    
     }
 
 }
