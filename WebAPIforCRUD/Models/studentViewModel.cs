@@ -65,9 +65,9 @@ namespace WebAPIforCRUD.Models
 
         public string changeTime = DateTime.Now.ToString();
 
-        public string updateTime { get; set; }
-        public string deleteTime { get; set; }
-        public string CreateTime { get; set; }
+        public string updateTime = DateTime.Now.ToString();
+        public string deleteTime= DateTime.Now.ToString();
+        public string CreateTime = DateTime.Now.ToString();
 
 
     }
