@@ -9,9 +9,12 @@ using WebAPIforCRUD.App_Start;
 using MongoDB.Driver;
 using System.Web.Helpers;
 using MongoDB.Bson;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPIforCRUD.Controllers
 {
+    [Authorize]
+    [ApiController]
     public class StudentController : ApiController
     {
         private MongoDBContext dbcontext;
