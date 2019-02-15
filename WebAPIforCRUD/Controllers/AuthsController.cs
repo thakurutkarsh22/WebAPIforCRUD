@@ -23,9 +23,9 @@ namespace WebAPIforCRUD.Controllers
         public async Task<HttpResponseMessage> TokenAsync()
         {
             
-            var header = Request.Headers.Authorization;
-            if (header.ToString().StartsWith("Inherit"))
-            {
+        //    var header = Request.Headers.Authorization;
+       //     if (header.ToString().StartsWith("Inherit"))
+       //     {
 
             /*    var credValue = header.ToString().Substring("Basic ".Length).Trim();
                 var usernameAndPassenc = Encoding.UTF8.GetString(Convert.FromBase64String(credValue)); //admin:pass
@@ -77,9 +77,9 @@ namespace WebAPIforCRUD.Controllers
                     //return new Microsoft.AspNetCore.Mvc.JsonResult(jsres);
                     return Request.CreateResponse(HttpStatusCode.OK, jsres);
                 }
-            }
+    //        }
 
-            return Request.CreateResponse(HttpStatusCode.ExpectationFailed,"This is garbage");
+    //        return Request.CreateResponse(HttpStatusCode.ExpectationFailed,"This is garbage");
         }
 
     }
