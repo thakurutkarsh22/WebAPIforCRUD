@@ -20,6 +20,10 @@ namespace WebAPIforCRUD.Controllers
     [ApiController]
     public class StudentController : ApiController
     {
+        public class student1
+        {
+            public string stu_name; 
+        }
         private MongoDBContext dbcontext;
         private IMongoCollection<studentViewModel> studentCollection;
 
@@ -42,15 +46,23 @@ namespace WebAPIforCRUD.Controllers
 
 
 
-            IList<studentViewModel> lsit = studentCollection.AsQueryable<studentViewModel>().Where(a => a.changeTime != "null").ToList(); 
-
-            if (students.Count == 0)
+            IList<studentViewModel> lsit = studentCollection.AsQueryable<studentViewModel>().Where(a => a.changeTime != "null").ToList();
+            IList<student1> llist = new List<student1>();
+            
+            student1 s = new student1();
+            foreach (var aa in lsit)
+            {
+               s= new student1();
+                s.stu_name = aa.stuName;
+                llist.Add(s); 
+            }
+            if (students.Count == 0 || lsit.Count ==0 )
             {
                 return NotFound();
 
             }
 
-            return Ok(lsit);
+            return Ok(llist);
             
             
 

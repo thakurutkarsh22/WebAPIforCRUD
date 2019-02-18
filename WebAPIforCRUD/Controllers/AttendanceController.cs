@@ -36,9 +36,14 @@ namespace WebAPIforCRUD.Controllers
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        public IHttpActionResult Get(string id)
         {
-            return "value";
+            var Filter = Builders<attendanceViewModel>.Filter.Eq("studend_id", id);
+            IList<attendanceViewModel> list = attendanceCollection.Find(Filter).ToList();
+          //  IList<attendanceViewModel> llist = attendanceCollection.AsQueryable<attendanceViewModel>()
+            //    .Where(x => x.studend_id == id).ToList();
+
+            return Ok(list); 
         }
 
         // POST api/<controller>
@@ -52,8 +57,8 @@ namespace WebAPIforCRUD.Controllers
             {
                 a1 = new attendanceViewModel();
                 a1.studend_id =(string) ss["studend_id"];
-                a1.AttendanceMark = (Boolean)ss["AttendanceMark"];
-                a1.dateOfAttendance = (DateTime)ss["dateOfAttendance"];
+                a1.AttendanceMark = (string)ss["AttendanceMark"];
+                a1.dateOfAttendance = (string)ss["dateOfAttendance"];
 
                 lsit.Add(a1);
             }

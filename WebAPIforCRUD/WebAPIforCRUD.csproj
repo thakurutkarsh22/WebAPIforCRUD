@@ -614,8 +614,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\AuthsController.cs" />
+    <Compile Include="Controllers\MeController.cs" />
+    <Compile Include="Controllers\SchoolController.cs" />
     <Compile Include="Models\attendanceViewModel.cs" />
     <Compile Include="Models\classViewModel.cs" />
+    <Compile Include="Models\meViewModel.cs" />
+    <Compile Include="Models\schoolViewModel.cs" />
     <Compile Include="Models\student.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Repo\AuthRepository.cs" />

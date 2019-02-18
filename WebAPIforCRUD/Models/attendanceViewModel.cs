@@ -14,8 +14,8 @@ namespace WebAPIforCRUD.Models
 
         public string studend_id { get; set; }
 
-        public Boolean AttendanceMark { get; set; }
+        public string AttendanceMark { get; set; }
 
-        public DateTime dateOfAttendance { get; set; }
+        public string dateOfAttendance { get; set; }
     }
 }
