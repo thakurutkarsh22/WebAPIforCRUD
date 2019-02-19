@@ -48,7 +48,7 @@ namespace WebAPIforCRUD.Controllers
                     var token = new JwtSecurityToken(
                          issuer: "mysite.com",
                          audience: "mysite.com",
-                         expires: DateTime.Now.AddMinutes(1),
+                         expires: DateTime.Now.AddMinutes(100),
                          claims: claimsdata,
                          signingCredentials: signInCred
                         );
@@ -82,5 +82,12 @@ namespace WebAPIforCRUD.Controllers
     //        return Request.CreateResponse(HttpStatusCode.ExpectationFailed,"This is garbage");
         }
 
+
+        class jsonres
+        {
+            public string description;
+            public string status;
+            public string token;
+        }
     }
 }

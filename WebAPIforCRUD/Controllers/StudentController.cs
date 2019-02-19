@@ -10,13 +10,20 @@ using MongoDB.Driver;
 using System.Web.Helpers;
 using MongoDB.Bson;
 using Microsoft.AspNetCore.Mvc;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Security;
 
 namespace WebAPIforCRUD.Controllers
 {
-    [Authorize]
+    [System.Web.Http.Authorize]
     [ApiController]
     public class StudentController : ApiController
     {
+        public class student1
+        {
+            public string stu_name; 
+        }
         private MongoDBContext dbcontext;
         private IMongoCollection<studentViewModel> studentCollection;
 
@@ -32,24 +39,30 @@ namespace WebAPIforCRUD.Controllers
 
         public IHttpActionResult getAllStudent()
         {
-
-            IList<studentViewModel> students = studentCollection.AsQueryable<studentViewModel>().Select(s => new studentViewModel()
-            {
-                _id = s._id,
-                stuName = s.stuName,
-                email = s.email
-                
-            }).ToList();
             
-         
+            var filter = Builders<studentViewModel>.Filter.Ne("changeTime", "null"); 
 
-            if (students.Count == 0)
+            IList<studentViewModel> students = studentCollection.Find(filter).ToList();
+
+
+
+            IList<studentViewModel> lsit = studentCollection.AsQueryable<studentViewModel>().Where(a => a.changeTime != "null").ToList();
+            IList<student1> llist = new List<student1>();
+            
+            student1 s = new student1();
+            foreach (var aa in lsit)
+            {
+               s= new student1();
+                s.stu_name = aa.stuName;
+                llist.Add(s); 
+            }
+            if (students.Count == 0 || lsit.Count ==0 )
             {
                 return NotFound();
 
             }
 
-            return Ok(students);
+            return Ok(llist);
             
             
 
@@ -136,7 +149,7 @@ namespace WebAPIforCRUD.Controllers
         }
 
         // post action Result 
-
+        [System.Web.Http.HttpPost]
         public IHttpActionResult PostNewStudent(studentViewModel student)
         {
             if (!ModelState.IsValid)
@@ -166,9 +179,10 @@ namespace WebAPIforCRUD.Controllers
         public IHttpActionResult DeleteStudentby(string id)
         {
             var on = ObjectId.Parse(id); 
-            var delete_obj = Builders<studentViewModel>.Filter.Eq("_id",on );
-
-            studentCollection.DeleteOne(delete_obj);
+            var filter = Builders<studentViewModel>.Filter.Eq("_id",on );
+            var update = Builders<studentViewModel>.Update.Set("changeTime", "null");
+           
+            studentCollection.UpdateOne(filter, update);
 
             return Ok("Voila Deleted");
         }
