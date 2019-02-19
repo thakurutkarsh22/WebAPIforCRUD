@@ -48,7 +48,7 @@ namespace WebAPIforCRUD.Controllers
                     var token = new JwtSecurityToken(
                          issuer: "mysite.com",
                          audience: "mysite.com",
-                         expires: DateTime.Now.AddMinutes(10),
+                         expires: DateTime.Now.AddMinutes(100),
                          claims: claimsdata,
                          signingCredentials: signInCred
                         );

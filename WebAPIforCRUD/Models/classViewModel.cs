@@ -9,6 +9,7 @@ namespace WebAPIforCRUD.Models
     {
         public string ClassName { get; set; }
         public string StudentId { get; set; }
+        public string UserId { get; set; }
 
     }
 }

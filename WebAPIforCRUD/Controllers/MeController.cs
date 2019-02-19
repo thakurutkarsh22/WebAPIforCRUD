@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -12,8 +13,12 @@ using WebAPIforCRUD.Repo;
 
 namespace WebAPIforCRUD.Controllers
 {
+    
+     
+    [Authorize]
     public class MeController : ApiController
     {
+        
 
         private MongoDBContext dbcontext;
         private IMongoCollection<meViewModel> studentCollection;
@@ -32,14 +37,38 @@ namespace WebAPIforCRUD.Controllers
             public string ID { get; set; }
         }
 
+        public string WhatinHeader()
+        {
+            var re = Request;
+            var headers = re.Headers;
+            if (headers.Contains("Authorization"))
+            {
+                string token = headers.GetValues("Authorization").First().Substring("Bearer ".Length).Trim();
+                return decodeJwtToken(token); 
+            }else
+            {
+                return "This is not a valid jwt token";
+           }
+        }
+
+        public string decodeJwtToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+            var username = jsonToken.Claims.First().Value;
+            return username;
+        }
+
         // GET api/<controller>
         public async System.Threading.Tasks.Task<IHttpActionResult> Get()
         {
+           var username =  WhatinHeader();
+
             var name = HttpContext.Current.Request.Form["Login"];
             var pass = HttpContext.Current.Request.Form["Password"];
             AuthRepository ap = new AuthRepository();
             User user = new User();
-            user = await ap.GetUserAsync(name, pass);
+            user = await ap.GetUserAsync(username);
             if (user != null)
             {
                 JSONMAKER jmaker = new JSONMAKER();

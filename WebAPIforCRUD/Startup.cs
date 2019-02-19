@@ -75,8 +75,19 @@ namespace WebAPIforCRUD
             var audienceSecret = Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["AudienceSecret"]);
 
             // Api controllers with an [Authorize] attribute will be validated with JWT
+            /*app.SetDefaultSignInAsAuthenticationType(new JwtBearerDefaults
+            {
+                AuthenticationMode = AuthenticationMode.Active,
+                AllowedAudiences = new[] { audienceId },
+
+                IssuerSecurityKeyProviders = new IIssuerSecurityKeyProvider[]
+                {
+                    new SymmetricKeyIssuerSecurityKeyProvider(issuer,audienceSecret)
+                }
+            });*/
             app.UseJwtBearerAuthentication(new JwtBearerAuthenticationOptions
             {
+             //   AuthenticationType = JwtBearerDefaults.AuthenticationScheme,
                 AuthenticationMode = AuthenticationMode.Active,
                 AllowedAudiences = new[] { audienceId },
                 
@@ -85,6 +96,8 @@ namespace WebAPIforCRUD
                     new SymmetricKeyIssuerSecurityKeyProvider(issuer,audienceSecret)
                 }
             });
+
+           // app.UseOAuthBearerAuthentication (new )
         }
     }
 }

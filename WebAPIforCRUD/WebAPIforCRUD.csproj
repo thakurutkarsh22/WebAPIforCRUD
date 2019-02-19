@@ -614,6 +614,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\AuthsController.cs" />
+    <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\MeController.cs" />
     <Compile Include="Controllers\SchoolController.cs" />
     <Compile Include="Models\attendanceViewModel.cs" />
@@ -717,6 +718,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="httpClient\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

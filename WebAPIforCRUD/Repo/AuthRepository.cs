@@ -44,6 +44,18 @@ namespace WebAPIforCRUD.Repo
                         .FirstOrDefaultAsync();
         }
 
+        public async Task<User> GetUserAsync(string login)
+        {
+            var builder = Builders<User>.Filter;
+            var filter = builder.Eq("Login", login) ;
+
+            return await usercollection
+                        .Find(filter)
+                        .FirstOrDefaultAsync();
+        }
+
+
+
         public Task<List<User>> GetUsers()
         {
             throw new NotImplementedException();
