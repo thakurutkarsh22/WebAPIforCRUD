@@ -10,6 +10,7 @@ using WebAPIforCRUD.Models;
 
 namespace WebAPIforCRUD.Controllers
 {
+    
     public class ClassController : ApiController
     {
 
@@ -24,26 +25,35 @@ namespace WebAPIforCRUD.Controllers
 
 
         }
-
+        
 
 
         // GET api/<controller>
+        [HttpGet]
+        
         public IHttpActionResult Get(string id)
         {
             var Filter = Builders<classViewModel>.Filter.Eq("UserId", id);
             IList<classViewModel> list = classCollection.Find(Filter).ToList();
-            //  IList<attendanceViewModel> llist = attendanceCollection.AsQueryable<attendanceViewModel>()
-            //    .Where(x => x.studend_id == id).ToList();
-
-            return Ok(list);
+            //  IList<classViewModel> llist = classCollection.AsQueryable<classViewModel>()
+            //    .Where(x => x.UserId == id).ToList();
+            if (list.Count != 0)
+            {
+                return Ok(list);
+            }
+            else
+            {
+                return BadRequest("User with this Id was not found"); 
+            }
+            
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+    /*    public string Get(int id)
         {
             return "value";
         }
-
+        */
         // POST api/<controller>
         public void Post([FromBody]string value)
         {
