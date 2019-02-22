@@ -20,11 +20,13 @@ namespace WebAPIforCRUD.Controllers
 
         private MongoDBContext dbcontext;
         private IMongoCollection<attendanceViewModel> attendanceCollection;
+        private IMongoCollection<studentViewModel> studentCollection;
 
         public AttendanceController()
         {
             dbcontext = new MongoDBContext();
             attendanceCollection = dbcontext.database.GetCollection<attendanceViewModel>("ATTENDANCE");
+            studentCollection = dbcontext.database.GetCollection<studentViewModel>("STUDENT");
 
 
         }
@@ -41,12 +43,58 @@ namespace WebAPIforCRUD.Controllers
         // GET api/<controller>/5
         public IHttpActionResult Get(string Class_id , string date)
         {
+            // get all student accrding to class 
+            var sfilter = Builders<studentViewModel>.Filter.Eq("Class_id", Class_id);
+            IList<studentViewModel> stulist = studentCollection.Find(sfilter).ToList();
+
+
             var Filter = Builders<attendanceViewModel>.Filter.Eq("class_id", Class_id);
             IList<attendanceViewModel> list = attendanceCollection.Find(Filter).ToList();
-            //  IList<attendanceViewModel> llist = attendanceCollection.AsQueryable<attendanceViewModel>()
-            //    .Where(x => x.studend_id == id).ToList();
-            IList<attendanceViewModel> flist = new List<attendanceViewModel>();
-            attendanceViewModel a1 = null;
+            
+            IList<attendanceViewModel1> flist = new List<attendanceViewModel1>();
+
+            foreach(var student in stulist)
+            {
+                Boolean flag = false;
+                foreach (var attendance in list)
+                {
+                    string tempDate = Convert.ToString(attendance.dateOfAttendance.AddDays(1)).Split(' ')[0];
+                    if (student._id.ToString().Equals(attendance.studend_id) && string.Compare(date, tempDate) == 0) // student._id.ToString().Equals(attendance.studend_id) && 
+                    {
+                        flag = true;
+                        break;                                                    
+                    }                  
+                }
+                if (flag)
+                {
+                    foreach (var attendance in list)
+                    { 
+                        if (student._id.ToString().Equals(attendance.studend_id))
+                        {
+                            attendanceViewModel1 notAtten = new attendanceViewModel1();
+                            notAtten.AttendanceMark = attendance.AttendanceMark;
+                            notAtten.class_id = attendance.class_id;
+                            notAtten.studend_id = attendance.studend_id;
+                            notAtten.dateOfAttendance = Convert.ToDateTime(date);
+                            //notAtten._id = attendance._id;
+                            flist.Add(notAtten);
+                            break;
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    attendanceViewModel1 notAtten = new attendanceViewModel1();
+                    notAtten.AttendanceMark = "false";
+                    notAtten.class_id = student.Class_id;
+                    notAtten.studend_id = student._id.ToString();
+                    notAtten.dateOfAttendance = Convert.ToDateTime(date);
+                    //notAtten._id = ss._id;
+                    flist.Add(notAtten);
+                }
+            }
+        /*    attendanceViewModel a1 = null;
             foreach(var ss in list)
             {
                 string temp = Convert.ToString(ss.dateOfAttendance).Split(' ')[0];
@@ -65,7 +113,7 @@ namespace WebAPIforCRUD.Controllers
                 {
                     continue; 
                 }
-            }
+            }*/
 
             return Ok(flist); 
         }
@@ -83,8 +131,10 @@ namespace WebAPIforCRUD.Controllers
                 a1.studend_id = (string)ss["studend_id"];
                 a1.AttendanceMark = (string)ss["AttendanceMark"];
                 DateTime date = Convert.ToDateTime(ss["dateOfAttendance"]);
-                a1.dateOfAttendance = (DateTime)date;
+                a1.dateOfAttendance = (DateTime)date.AddDays(1);
+                //a1.dateOfAttendance.AddDays(1);
                 a1.class_id = (string)ss["class_id"];
+
 
                 // convert to dateTimeformat
                 var userdate = Convert.ToDateTime(a1.dateOfAttendance);
@@ -93,8 +143,7 @@ namespace WebAPIforCRUD.Controllers
                 var beginDate = date;       
                 var endDate = beginDate.AddDays(1); 
 
-                var filterList = attendanceCollection.AsQueryable<attendanceViewModel>().Where(x => (x.dateOfAttendance >= beginDate) && (x.dateOfAttendance <= endDate)
-                && ((x.studend_id) == a1.studend_id)).ToList();
+                var filterList = attendanceCollection.AsQueryable<attendanceViewModel>().Where(x => (x.dateOfAttendance == userdate) && ((x.studend_id) == a1.studend_id)).ToList();
 
                 if (filterList.Count == 0)
                 {

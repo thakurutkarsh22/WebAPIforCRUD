@@ -619,6 +619,7 @@
     <Compile Include="Controllers\MeController.cs" />
     <Compile Include="Controllers\SchoolController.cs" />
     <Compile Include="Models\attendanceViewModel.cs" />
+    <Compile Include="Models\attendanceViewModel1.cs" />
     <Compile Include="Models\classViewModel.cs" />
     <Compile Include="Models\meViewModel.cs" />
     <Compile Include="Models\schoolViewModel.cs" />
