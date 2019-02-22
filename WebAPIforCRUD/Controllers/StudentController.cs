@@ -68,22 +68,36 @@ namespace WebAPIforCRUD.Controllers
 
         }
 
-        public IHttpActionResult GetStudentById(string id)
+        public IHttpActionResult GetStudentById(string Class_id)
         {
-            studentViewModel student = null;
-            var query_id = new ObjectId(id); 
+          //  studentViewModel student = null;
+            //var query_id = new ObjectId(id); 
 
 
 
-            student = studentCollection.AsQueryable<studentViewModel>()
-                    .Select(s => new studentViewModel()
-                    {
-                        _id = s._id,
-                        stuName = s.stuName,
-                        email = s.email
+            /*  student = studentCollection.AsQueryable<studentViewModel>()
+                      .Select(s => new studentViewModel()
+                      {
+                          _id = s._id,
+                          stuName = s.stuName,
+                          email = s.email
 
-                    }).Where(s => s._id == query_id)
-                 .SingleOrDefault(x => x._id == query_id);
+                      }).Where(s => s.Class_id == Class_id).
+                   .SingleOrDefault(x => x._id == query_id);
+                   */
+
+            var filter = Builders<studentViewModel>.Filter.Eq("Class_id", Class_id) & Builders<studentViewModel>.Filter.Ne("changeTime", "null");
+            IList<studentViewModel> student = studentCollection.Find(filter).ToList();
+
+            IList<student1> llist = new List<student1>();
+
+            student1 s = new student1();
+            foreach (var aa in student)
+            {
+                s = new student1();
+                s.stu_name = aa.stuName;
+                llist.Add(s);
+            }
 
 
             if (student == null)
@@ -91,7 +105,7 @@ namespace WebAPIforCRUD.Controllers
                 return NotFound();
             }
 
-            return Ok(student);
+            return Ok(llist);
         }
 
         public IHttpActionResult GetStudentByNames(string namesss)
