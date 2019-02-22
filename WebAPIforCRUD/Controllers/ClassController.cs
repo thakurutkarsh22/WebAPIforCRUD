@@ -31,9 +31,9 @@ namespace WebAPIforCRUD.Controllers
         // GET api/<controller>
         [HttpGet]
         
-        public IHttpActionResult Get(string id)
+        public IHttpActionResult Get(string User_id)
         {
-            var Filter = Builders<classViewModel>.Filter.Eq("UserId", id);
+            var Filter = Builders<classViewModel>.Filter.Eq("UserId", User_id);
             IList<classViewModel> list = classCollection.Find(Filter).ToList();
             //  IList<classViewModel> llist = classCollection.AsQueryable<classViewModel>()
             //    .Where(x => x.UserId == id).ToList();

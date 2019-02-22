@@ -16,6 +16,8 @@ namespace WebAPIforCRUD.Models
 
         public string AttendanceMark { get; set; }
 
-        public string dateOfAttendance { get; set; }
+        public DateTime dateOfAttendance { get; set; }
+
+        public string class_id { get; set; }
     }
 }

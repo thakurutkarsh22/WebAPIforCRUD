@@ -9,9 +9,12 @@ using WebAPIforCRUD.App_Start;
 using WebAPIforCRUD.Models;
 using Json;
 using Newtonsoft.Json.Linq;
+using System.Data.Entity;
+using MongoDB.Bson;
 
 namespace WebAPIforCRUD.Controllers
 {
+    
     public class AttendanceController : ApiController
     {
 
@@ -36,14 +39,35 @@ namespace WebAPIforCRUD.Controllers
         }
 
         // GET api/<controller>/5
-        public IHttpActionResult Get(string id)
+        public IHttpActionResult Get(string Class_id , string date)
         {
-            var Filter = Builders<attendanceViewModel>.Filter.Eq("studend_id", id);
+            var Filter = Builders<attendanceViewModel>.Filter.Eq("class_id", Class_id);
             IList<attendanceViewModel> list = attendanceCollection.Find(Filter).ToList();
-          //  IList<attendanceViewModel> llist = attendanceCollection.AsQueryable<attendanceViewModel>()
+            //  IList<attendanceViewModel> llist = attendanceCollection.AsQueryable<attendanceViewModel>()
             //    .Where(x => x.studend_id == id).ToList();
+            IList<attendanceViewModel> flist = new List<attendanceViewModel>();
+            attendanceViewModel a1 = null;
+            foreach(var ss in list)
+            {
+                string temp = Convert.ToString(ss.dateOfAttendance).Split(' ')[0];
+              //  var datess = ss.dateOfAttendance.Split('T')[0];
+                if (string.Compare(date,temp)==0)
+                {
+                    a1 = new attendanceViewModel();
+                    a1.AttendanceMark = ss.AttendanceMark;
+                    a1.class_id = ss.class_id;
+                    a1.studend_id = ss.studend_id;
+                    a1.dateOfAttendance = ss.dateOfAttendance;
+                    a1._id = ss._id;
+                    flist.Add(a1);
 
-            return Ok(list); 
+                }else
+                {
+                    continue; 
+                }
+            }
+
+            return Ok(flist); 
         }
 
         // POST api/<controller>
@@ -56,38 +80,50 @@ namespace WebAPIforCRUD.Controllers
             foreach (var ss in value)
             {
                 a1 = new attendanceViewModel();
-                a1.studend_id =(string) ss["studend_id"];
+                a1.studend_id = (string)ss["studend_id"];
                 a1.AttendanceMark = (string)ss["AttendanceMark"];
-                a1.dateOfAttendance = (string)ss["dateOfAttendance"];
+                DateTime date = Convert.ToDateTime(ss["dateOfAttendance"]);
+                a1.dateOfAttendance = (DateTime)date;
+                a1.class_id = (string)ss["class_id"];
 
-                lsit.Add(a1);
+                // convert to dateTimeformat
+                var userdate = Convert.ToDateTime(a1.dateOfAttendance);
+
+
+                var beginDate = date;       
+                var endDate = beginDate.AddDays(1); 
+
+                var filterList = attendanceCollection.AsQueryable<attendanceViewModel>().Where(x => (x.dateOfAttendance >= beginDate) && (x.dateOfAttendance <= endDate)
+                && ((x.studend_id) == a1.studend_id)).ToList();
+
+                if (filterList.Count == 0)
+                {
+                    attendanceCollection.InsertOneAsync(a1);
+                }
+                else
+                {
+                    attendanceViewModel a2 = filterList[0];
+                    ObjectId id = a2._id;
+                    var filter = Builders<attendanceViewModel>.Filter.Eq("_id", id);
+                    var update = Builders<attendanceViewModel>.Update.Set("AttendanceMark", a1.AttendanceMark);
+
+                    var result = attendanceCollection.UpdateOne(filter, update);
+                }
+
+
+                // lsit.Add(a1);
             }
 
-    /*        attendanceViewModel a1 = new attendanceViewModel();
-            a1.AttendanceMark = false;
-            a1.dateOfAttendance = DateTime.Now;
-            a1.studend_id = "5c655f1e2b38d6161c7cd10blusp";
 
-            attendanceViewModel a2 = new attendanceViewModel();
-            a2.AttendanceMark = true;
-            a2.dateOfAttendance = DateTime.Now;
-            a2.studend_id = "5c655f1e2b38d6161c7cd10bluspaa";
 
-            IList<attendanceViewModel> lsit = new List<attendanceViewModel>();
-            lsit.Add(a1);
-            lsit.Add(a2);
-     */
-      //      JObject json = JObject.Parse(value); 
-            
 
-            attendanceCollection.InsertManyAsync(lsit);
+            //   attendanceCollection.InsertManyAsync(lsit);
 
-           
+
             return Ok("DOne");
 
 
         }
-
         // PUT api/<controller>/5
         public void Put(int id, [FromBody]string value)
         {
