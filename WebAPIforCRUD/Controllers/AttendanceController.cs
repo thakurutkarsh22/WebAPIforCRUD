@@ -204,7 +204,7 @@ namespace WebAPIforCRUD.Controllers
                 a1.studend_id = (string)ss["studend_id"];
                 a1.AttendanceMark = (string)ss["AttendanceMark"];
                 DateTime date = Convert.ToDateTime(ss["dateOfAttendance"]);
-                a1.dateOfAttendance = (DateTime)date.AddDays(1);
+                a1.dateOfAttendance = (DateTime)date;
                 //a1.dateOfAttendance.AddDays(1);
                 a1.class_id = (string)ss["class_id"];
 
