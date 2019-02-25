@@ -50,72 +50,10 @@ namespace WebAPIforCRUD.Controllers
 
             var Filter = Builders<attendanceViewModel>.Filter.Eq("class_id", Class_id);
             List<attendanceViewModel> list = attendanceCollection.Find(Filter).ToList();
+
             List<attendanceViewModel> attenList = attandanceList(list , date);
-            List<attendanceViewModel1> a = mainFunction(stulist, attenList); 
 
-   //         IList<attendanceViewModel1> flist = new List<attendanceViewModel1>();
-
-        /*    foreach(var student in stulist)
-            {
-                Boolean flag = false;
-                foreach (var attendance in list)
-                {
-                    string tempDate = Convert.ToString(attendance.dateOfAttendance.AddDays(1)).Split(' ')[0];
-                    if (student._id.ToString().Equals(attendance.studend_id)) //  && string.Compare(date, tempDate) == 0   student._id.ToString().Equals(attendance.studend_id) && 
-                    {
-                        flag = true;
-                        break;                                                    
-                    }                  
-                }
-                if (flag)
-                {
-                    foreach (var attendance in list)
-                    { 
-                        if (student._id.ToString().Equals(attendance.studend_id))
-                        {
-                            attendanceViewModel1 notAtten = new attendanceViewModel1();
-                            notAtten.AttendanceMark = attendance.AttendanceMark;
-                            notAtten.class_id = attendance.class_id;
-                            notAtten.studend_id = attendance.studend_id;
-                            notAtten.dateOfAttendance = Convert.ToDateTime(date);
-                            //notAtten._id = attendance._id;
-                            flist.Add(notAtten);
-                            break;
-                        }
-                    }
-                    
-                }
-                else
-                {
-                    attendanceViewModel1 notAtten = new attendanceViewModel1();
-                    notAtten.AttendanceMark = "false";
-                    notAtten.class_id = student.Class_id;
-                    notAtten.studend_id = student._id.ToString();
-                    notAtten.dateOfAttendance = Convert.ToDateTime(date);
-                    //notAtten._id = ss._id;
-                    flist.Add(notAtten);
-                }
-            }*/
-        /*    attendanceViewModel a1 = null;
-            foreach(var ss in list)
-            {
-                string temp = Convert.ToString(ss.dateOfAttendance).Split(' ')[0];
-              //  var datess = ss.dateOfAttendance.Split('T')[0];
-                if (string.Compare(date,temp)==0)
-                {
-                    a1 = new attendanceViewModel();
-                    a1.AttendanceMark = ss.AttendanceMark;
-                    a1.class_id = ss.class_id;
-                    a1.studend_id = ss.studend_id;
-                    a1.dateOfAttendance = ss.dateOfAttendance;
-                    a1._id = ss._id;
-                    flist.Add(a1);
-
-                }else
-                {
-                    continue; 
-                }
-            }*/
+            List<attendanceViewModel1> a = mainFunction(stulist, attenList, date); 
 
             return Ok(a); 
         }
@@ -142,13 +80,13 @@ namespace WebAPIforCRUD.Controllers
             return tempList;
         }
 
-        private List<attendanceViewModel1> mainFunction(List<studentViewModel> stulist,IList<attendanceViewModel> attenList)
+        private List<attendanceViewModel1> mainFunction(List<studentViewModel> stulist,IList<attendanceViewModel> attenList ,string date)
         {
             List<attendanceViewModel1> flist = new List<attendanceViewModel1>();
 
             if (attenList.Count == 0)
             {
-                flist = convertToJsonforattenLsitzero(stulist);
+                flist = convertToJsonforattenLsitzero(stulist,date);
             }else
             {
                 foreach(var ss in stulist)
@@ -159,34 +97,34 @@ namespace WebAPIforCRUD.Controllers
                         if (ss._id.ToString().CompareTo(aa.studend_id) == 0)
                         {
                             count++;
-                            flist.Add(makeobject( ss._id.ToString(),ss.stuName,aa.AttendanceMark,ss.Class_id));
+                            flist.Add(makeobject( ss._id.ToString(),ss.stuName,aa.AttendanceMark,ss.Class_id,date));
                         }
                     }
                     if (count == 0)
                     {
-                        flist.Add(makeobject(ss._id.ToString(), ss.stuName ,"false",ss.Class_id));
+                        flist.Add(makeobject(ss._id.ToString(), ss.stuName ,"false",ss.Class_id,date));
                     }
                 }
             }
             return flist;
         }
 
-        private List<attendanceViewModel1> convertToJsonforattenLsitzero(List<studentViewModel> list)
+        private List<attendanceViewModel1> convertToJsonforattenLsitzero(List<studentViewModel> list, string date)
         {
             List<attendanceViewModel1> flist = new List<attendanceViewModel1>();
             attendanceViewModel1 a = null;
             foreach(var ss in list)
             {
-                a = new attendanceViewModel1(ss._id.ToString() , ss.stuName , "false",  ss.Class_id);
+                a = new attendanceViewModel1(ss._id.ToString() , ss.stuName , "false",  ss.Class_id,date);
                 flist.Add(a);
             }
 
             return flist; 
         }
 
-        private attendanceViewModel1 makeobject(string stu_id , string stu_name , string attendancemark , string class_id)
+        private attendanceViewModel1 makeobject(string stu_id , string stu_name , string attendancemark , string class_id, string date)
         {
-            attendanceViewModel1 a = new attendanceViewModel1(stu_id,stu_name,attendancemark,class_id);
+            attendanceViewModel1 a = new attendanceViewModel1(stu_id,stu_name,attendancemark,class_id ,date);
             return a; 
         }
 
@@ -220,6 +158,7 @@ namespace WebAPIforCRUD.Controllers
 
                 if (filterList.Count == 0)
                 {
+                    a1.dateOfAttendance = (DateTime)date;
                     attendanceCollection.InsertOneAsync(a1);
                 }
                 else

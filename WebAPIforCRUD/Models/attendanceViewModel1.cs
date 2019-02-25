@@ -18,12 +18,15 @@ namespace WebAPIforCRUD.Models
 
         public string class_id { get; set; }
 
-        public attendanceViewModel1(string student_id1 , string stu_name1 , string attendanceMark, string class_id1)
+        public string date { get; set; }
+
+        public attendanceViewModel1(string student_id1 , string stu_name1 , string attendanceMark, string class_id1 , string date)
         {
             this.studend_id = student_id1;
             this.stu_name = stu_name1;
             this.AttendanceMark = attendanceMark;
-            this.class_id = class_id1; 
+            this.class_id = class_id1;
+            this.date = date;
         }
     }
 }
