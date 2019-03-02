@@ -47,6 +47,10 @@ namespace WebAPIforCRUD.Controllers
             var sfilter = Builders<studentViewModel>.Filter.Eq("Class_id", Class_id);
             List<studentViewModel> stulist = studentCollection.Find(sfilter).ToList();
 
+            if (date.StartsWith("0") )
+            {
+               date= date.Substring(1);
+            }
 
             var Filter = Builders<attendanceViewModel>.Filter.Eq("class_id", Class_id);
             List<attendanceViewModel> list = attendanceCollection.Find(Filter).ToList();
@@ -159,6 +163,13 @@ namespace WebAPIforCRUD.Controllers
                 if (filterList.Count == 0)
                 {
                     a1.dateOfAttendance = (DateTime)date;
+
+                    if (!ModelState.IsValid)
+                    {
+                        return BadRequest("Invalid data.");
+
+                    }
+
                     attendanceCollection.InsertOneAsync(a1);
                 }
                 else
