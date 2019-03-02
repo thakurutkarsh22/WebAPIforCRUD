@@ -68,6 +68,8 @@ namespace WebAPIforCRUD.Models
         public string updateTime = DateTime.Now.ToString();
         public string deleteTime= DateTime.Now.ToString();
         public string CreateTime = DateTime.Now.ToString();
+        [BsonElement("Class_id")]
+        public string Class_id { get; set; }
 
 
     }

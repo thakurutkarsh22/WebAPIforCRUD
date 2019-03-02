@@ -47,10 +47,10 @@ namespace WebAPIforCRUD.Controllers
         }
 
         // GET api/<controller>/5
-        public IHttpActionResult GetById(string id)
+        public IHttpActionResult GetById(string School_id)
         {
             schoolViewModel student = null;
-            var query_id = new ObjectId(id);
+            var query_id = new ObjectId(School_id);
 
 
 
