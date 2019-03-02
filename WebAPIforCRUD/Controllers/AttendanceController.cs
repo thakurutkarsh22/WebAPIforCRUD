@@ -120,12 +120,18 @@ namespace WebAPIforCRUD.Controllers
                         if (ss._id.ToString().CompareTo(aa.studend_id) == 0)
                         {
                             count++;
-                            flist.Add(makeobject( ss._id.ToString(),ss.stuName,aa.AttendanceMark,ss.Class_id,date));
+                            Boolean b = false;
+                            if (aa.AttendanceMark.Equals("true"))
+                            {
+                                b = true;
+                            }
+                            flist.Add(makeobject( ss._id.ToString(),ss.stuName,b,ss.Class_id,date));
                         }
                     }
                     if (count == 0)
                     {
-                        flist.Add(makeobject(ss._id.ToString(), ss.stuName ,"false",ss.Class_id,date));
+                        Boolean b = false;
+                        flist.Add(makeobject(ss._id.ToString(), ss.stuName ,b,ss.Class_id,date));
                     }
                 }
             }
@@ -138,14 +144,15 @@ namespace WebAPIforCRUD.Controllers
             attendanceViewModel1 a = null;
             foreach(var ss in list)
             {
-                a = new attendanceViewModel1(ss._id.ToString() , ss.stuName , "false",  ss.Class_id,date);
+                Boolean b = false;
+                a = new attendanceViewModel1(ss._id.ToString() , ss.stuName , b,  ss.Class_id,date);
                 flist.Add(a);
             }
 
             return flist; 
         }
 
-        private attendanceViewModel1 makeobject(string stu_id , string stu_name , string attendancemark , string class_id, string date)
+        private attendanceViewModel1 makeobject(string stu_id , string stu_name , Boolean attendancemark , string class_id, string date)
         {
             attendanceViewModel1 a = new attendanceViewModel1(stu_id,stu_name,attendancemark,class_id ,date);
             return a; 
