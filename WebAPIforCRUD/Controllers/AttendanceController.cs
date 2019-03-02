@@ -47,10 +47,7 @@ namespace WebAPIforCRUD.Controllers
             var sfilter = Builders<studentViewModel>.Filter.Eq("Class_id", Class_id);
             List<studentViewModel> stulist = studentCollection.Find(sfilter).ToList();
 
-            if (date.StartsWith("0") )
-            {
-               date= date.Substring(1);
-            }
+           
 
             var Filter = Builders<attendanceViewModel>.Filter.Eq("class_id", Class_id);
             List<attendanceViewModel> list = attendanceCollection.Find(Filter).ToList();
@@ -66,11 +63,33 @@ namespace WebAPIforCRUD.Controllers
         {
             List<attendanceViewModel> tempList = new List<attendanceViewModel>();
 
-
+            
             foreach (var ss in list)
             {
                 string datefrommodel = Convert.ToString(ss.dateOfAttendance).Split(' ')[0];
-                if (datefrommodel.CompareTo(date) == 0)
+                string day = ss.dateOfAttendance.Day.ToString();
+                string month = ss.dateOfAttendance.Month.ToString();
+                string year = ss.dateOfAttendance.Year.ToString();
+
+                string Modidate = date.Substring(3, 2); 
+                string Modimonth = date.Substring(0,2); 
+                
+                if (date.StartsWith("0"))
+                {
+                    Modimonth = date.Substring(1, 1);
+                }
+
+                if (Modidate.StartsWith("0"))
+                {
+                    Modidate = Modidate.Substring(1);
+                }
+
+
+
+                Boolean daycheck = day.Equals(Modidate);
+                Boolean monthcheck = month.Equals(Modimonth);
+                Boolean yearcheck = year.Equals(date.Substring(6,4));
+                if (daycheck && monthcheck && yearcheck)
                 {
                     tempList.Add(ss);
                 }
