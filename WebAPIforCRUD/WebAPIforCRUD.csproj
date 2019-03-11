@@ -618,9 +618,11 @@
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\MeController.cs" />
     <Compile Include="Controllers\SchoolController.cs" />
+    <Compile Include="Controllers\ViewController.cs" />
     <Compile Include="Models\attendanceViewModel.cs" />
     <Compile Include="Models\attendanceViewModel1.cs" />
     <Compile Include="Models\classViewModel.cs" />
+    <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\meViewModel.cs" />
     <Compile Include="Models\schoolViewModel.cs" />
     <Compile Include="Models\student.cs" />
@@ -717,6 +719,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\View\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

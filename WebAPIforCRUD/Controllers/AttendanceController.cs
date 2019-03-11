@@ -169,12 +169,12 @@ namespace WebAPIforCRUD.Controllers
             foreach (var ss in value)
             {
                 a1 = new attendanceViewModel();
-                a1.studend_id = (string)ss["studend_id"];
+                a1.studend_id = (string)ss["student_id"];
                 a1.AttendanceMark = (string)ss["AttendanceMark"];
                 DateTime date = Convert.ToDateTime(ss["dateOfAttendance"]);
                 a1.dateOfAttendance = (DateTime)date;
                 //a1.dateOfAttendance.AddDays(1);
-                a1.class_id = (string)ss["class_id"];
+                a1.class_id = (string)ss["Class_id"];
 
 
                 // convert to dateTimeformat
@@ -196,7 +196,8 @@ namespace WebAPIforCRUD.Controllers
 
                     }
 
-                    attendanceCollection.InsertOneAsync(a1);
+                    //  attendanceCollection.InsertOneAsync(a1);
+                    lsit.Add(a1);
                 }
                 else
                 {
@@ -215,7 +216,7 @@ namespace WebAPIforCRUD.Controllers
 
 
 
-            //   attendanceCollection.InsertManyAsync(lsit);
+               attendanceCollection.InsertManyAsync(lsit);
 
 
             return Ok("DOne");
